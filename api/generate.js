@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-
+console.log("API Key:", process.env.OPENAI_API_KEY ? "FOUND" : "MISSING");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
