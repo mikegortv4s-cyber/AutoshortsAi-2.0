@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AutoShorts.ai 2.0 — Turn car footage into cash</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <nav class="nav container">
+    <div class="brand">AutoShorts.ai 2.0</div>
+    <div class="nav-actions">
+      <a class="btn" href="#features">Features</a>
+      <a class="btn" href="#pricing">Pricing</a>
+      <a class="btn primary" href="#signup">Get Started</a>
+    </div>
+  </nav>
+
+  <header class="hero container">
+    <h1>AutoShorts.ai 2.0</h1>
+    <p class="tag">AI that turns car footage into viral Shorts — captions, hooks & thumbnails included.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="#signup">Join Free Beta</a>
+      <a class="btn" href="#demo">Watch Demo</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="features" class="card">
+      <h2>What it does</h2>
+      <ul>
+        <li><strong>Auto-edit:</strong> Upload your car video — get 3 optimized Shorts.</li>
+        <li><strong>AI Hooks:</strong> 30 ready captions for virality and monetization.</li>
+        <li><strong>Thumbnails:</strong> Eye-catching, car-themed visuals.</li>
+        <li><strong>Affiliate Integration:</strong> Auto-add your affiliate links.</li>
+      </ul>
+    </section>
+
+    <section id="pricing" class="card">
+      <h2>Pricing</h2>
+      <div class="pricing-grid">
+        <div class="price">
+          <h3>Starter</h3>
+          <p>$15 / month</p>
+          <ul><li>20 edits</li><li>Email support</li></ul>
+          <a class="btn primary" href="checkout.html?plan=starter">Select</a>
+        </div>
+        <div class="price featured">
+          <h3>Pro</h3>
+          <p>$49 / month</p>
+          <ul><li>100 edits</li><li>Affiliate tools</li></ul>
+          <a class="btn primary" href="checkout.html?plan=pro">Select</a>
+        </div>
+        <div class="price">
+          <h3>Creator</h3>
+          <p>$149 / month</p>
+          <ul><li>500 edits</li><li>White-label exports</li></ul>
+          <a class="btn primary" href="checkout.html?plan=creator">Select</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="signup" class="card">
+      <h2>Join Beta</h2>
+      <form id="signupForm" action="https://formspree.io/f/your-form-id" method="POST">
+        <input name="name" placeholder="Your name" required/>
+        <input name="email" type="email" placeholder="Email" required/>
+        <button class="btn primary" type="submit">Join Free Beta</button>
+      </form>
+    </section>
+
+    <section id="ai" class="card">
+      <h2>Try AI Caption Generator</h2>
+      <textarea id="inputText" placeholder="Describe your car video (e.g. '2020 Mustang burnout at night')"></textarea>
+      <button class="btn primary" onclick="generateCaptions()">Generate Captions</button>
+      <pre id="output"></pre>
+    </section>
+  </main>
+
+  <footer class="card">
+    <p>AutoShorts.ai 2.0 — MVP | Deploy to GitHub Pages or Vercel.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

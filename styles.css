@@ -1,0 +1,8 @@
+:root{--bg:#0b1220;--card:#071627;--accent:#1fb6ff;--accent2:#ff7a59;--text:#e6eef8;--muted:#9fb0c8}
+body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#051021 0%, #071627 100%);color:var(--text)}
+.container{max-width:980px;margin:0 auto;padding:28px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+.brand{font-weight:700}
+.btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:var(--text);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--accent2);color:#071627;border:0}
+.hero{text-align:center;padding:36px 0}.tag{color:var(--muted)}.card{background:rgba(255,255,255,0.02);padding:18px;margin:18px 0;border-radius:10px}.pricing-grid{display:flex;gap:12px;flex-wrap:wrap}.price{flex:1;padding:12px;border-radius:8px;background:rgba(255,255,255,0.01)}.featured{border:2px solid rgba(255,255,255,0.04)}input,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);width:100%;margin:8px 0}pre{white-space:pre-wrap;background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;margin-top:8px}
