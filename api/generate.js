@@ -1,35 +1,49 @@
-import OpenAI from "openai";
-console.log("API Key:", process.env.OPENAI_API_KEY ? "FOUND" : "MISSING");
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+import fetch from "node-fetch"; // only needed if not using Vercel's built-in fetch
 
 export default async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { prompt } = req.body;
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: "OpenAI API key not found" });
+  }
+
+  const { prompt } = req.body || {};
+
   if (!prompt) {
-    return res.status(400).json({ error: "Missing prompt" });
+    return res.status(400).json({ error: "Missing prompt in request body" });
   }
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a creative YouTube Shorts caption generator for car videos." },
-        { role: "user", content: prompt }
-      ],
-      max_tokens: 150
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are an AI that generates short, viral captions for car videos." },
+          { role: "user", content: prompt },
+        ],
+        max_tokens: 150,
+      }),
     });
 
-    const captions = response.choices[0].message.content
-      .split("\n")
-      .filter(line => line.trim() !== "");
+    const data = await response.json();
 
-    res.status(200).json({ captions });
+    if (!data.choices || !data.choices[0]?.message?.content) {
+      return res.status(500).json({ error: "No valid response from OpenAI" });
+    }
+
+    res.status(200).json({ captions: data.choices[0].message.content });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("OpenAI Error:", error);
+    res.status(500).json({ error: "Server crashed, check logs" });
   }
 }
