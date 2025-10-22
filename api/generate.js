@@ -1,49 +1,9 @@
-import fetch from "node-fetch"; // only needed if not using Vercel's built-in fetch
-
 export default async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  console.log("Function reached!");
+  console.log("API Key:", process.env.OPENAI_API_KEY ? "FOUND" : "MISSING");
 
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    return res.status(500).json({ error: "OpenAI API key not found" });
-  }
-
-  const { prompt } = req.body || {};
-
-  if (!prompt) {
-    return res.status(400).json({ error: "Missing prompt in request body" });
-  }
-
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: "You are an AI that generates short, viral captions for car videos." },
-          { role: "user", content: prompt },
-        ],
-        max_tokens: 150,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!data.choices || !data.choices[0]?.message?.content) {
-      return res.status(500).json({ error: "No valid response from OpenAI" });
-    }
-
-    res.status(200).json({ captions: data.choices[0].message.content });
-  } catch (error) {
-    console.error("OpenAI Error:", error);
-    res.status(500).json({ error: "Server crashed, check logs" });
-  }
+  res.status(200).json({
+    message: "Function is running",
+    apiKeyStatus: process.env.OPENAI_API_KEY ? "FOUND" : "MISSING"
+  });
 }
