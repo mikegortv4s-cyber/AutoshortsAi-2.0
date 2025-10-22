@@ -1,3 +1,4 @@
+console.log("OPENAI_API_KEY =", process.env.OPENAI_API_KEY);
 // api/generate.js
 import OpenAI from "openai";
 
