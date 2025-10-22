@@ -1,33 +1,28 @@
 // api/generate.js
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Make sure your Vercel environment variable is set
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export default async function handler(req, res) {
   // --- CORS headers ---
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from anywhere
+  res.setHeader("Access-Control-Allow-Origin", "*"); // allow all origins
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // Handle preflight OPTIONS request
+  // respond to OPTIONS requests
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  // Only allow POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const { prompt } = req.body;
-
-    if (!prompt) {
-      return res.status(400).json({ error: "No prompt provided" });
-    }
+    if (!prompt) return res.status(400).json({ error: "No prompt provided" });
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -36,7 +31,6 @@ export default async function handler(req, res) {
     });
 
     const caption = response.choices[0].message.content.trim();
-
     return res.status(200).json({ caption });
   } catch (error) {
     console.error(error);
