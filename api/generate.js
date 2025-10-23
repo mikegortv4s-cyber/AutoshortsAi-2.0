@@ -1,9 +1,10 @@
-// api/generate.js
 export default async function handler(req, res) {
+  // Allow cross-origin requests
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+  // Handle preflight requests
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
@@ -21,10 +22,11 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    const caption = data?.generated_text || "No caption generated";
+
+    // Check both possible places for generated text
+    const caption = data[0]?.generated_text || data?.generated_text || "No caption generated";
 
     return res.status(200).json({ caption });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Something went wrong" });
