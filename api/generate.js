@@ -1,12 +1,14 @@
+import fetch from "node-fetch";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ caption: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   const { prompt } = req.body;
 
   if (!prompt) {
-    return res.status(400).json({ caption: "Prompt is required" });
+    return res.status(400).json({ error: "Prompt is required" });
   }
 
   try {
@@ -21,12 +23,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Look in both possible places for generated text
+    if (data.error) {
+      return res.status(500).json({ error: data.error });
+    }
+
     const caption = data[0]?.generated_text || data?.generated_text || "No caption generated";
 
     return res.status(200).json({ caption });
-
-  } catch (error) {
-    return res.status(500).json({ caption: `Error: ${error.message}` });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 }
