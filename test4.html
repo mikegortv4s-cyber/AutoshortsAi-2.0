@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoshorts AI Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; }
+    input, button { padding: 10px; font-size: 16px; }
+    #caption { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Autoshorts AI Caption Generator</h1>
+  <input type="text" id="prompt" placeholder="Enter your prompt" size="50">
+  <button id="generateBtn">Generate Caption</button>
+
+  <div id="caption"></div>
+
+  <script>
+    const apiUrl = "https://autoshorts-ai-2-0-8cneaquip-michael-gs-projects-af8676cc.vercel.app/api/generate"; // replace with your Vercel production URL
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const prompt = document.getElementById("prompt").value;
+      if (!prompt) return alert("Please enter a prompt!");
+
+      document.getElementById("caption").textContent = "Generating...";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        document.getElementById("caption").textContent = data.caption || "No caption generated";
+      } catch (err) {
+        console.error(err);
+        document.getElementById("caption").textContent = "Error generating caption";
+      }
+    });
+  </script>
+
+</body>
+</html>
