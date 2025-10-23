@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const { prompt } = req.body;
 
   if (!prompt) {
-    return res.status(400).json({ error: "No prompt provided" });
+    return res.status(400).json({ error: "Prompt is required" });
   }
 
   try {
@@ -25,15 +25,22 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // GPT-2 returns an array of objects with 'generated_text'
-    const caption =
-      data?.[0]?.generated_text ||
-      data?.generated_text ||
-      "No caption generated";
+    console.log("Raw HuggingFace Response:", data); // <- Debug
+
+    // GPT2 can return array with generated_text or error message
+    let caption = "No caption generated";
+
+    if (Array.isArray(data) && data[0]?.generated_text) {
+      caption = data[0].generated_text;
+    } else if (data.generated_text) {
+      caption = data.generated_text;
+    } else if (data.error) {
+      caption = `Error: ${data.error}`;
+    }
 
     return res.status(200).json({ caption });
-  } catch (error) {
-    console.error("HuggingFace API error:", error);
-    return res.status(500).json({ caption: "No caption generated" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
   }
 }
