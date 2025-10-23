@@ -1,16 +1,11 @@
-console.log("OPENAI_API_KEY =", process.env.OPENAI_API_KEY);
 // api/generate.js
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // --- CORS headers ---
+  res.setHeader("Access-Control-Allow-Origin", "*"); // allow all origins
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+  // respond to OPTIONS requests
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
@@ -18,13 +13,21 @@ export default async function handler(req, res) {
     const { prompt } = req.body;
     if (!prompt) return res.status(400).json({ error: "No prompt provided" });
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 60,
+    // Hugging Face API call
+    const response = await fetch("https://api-inference.huggingface.co/models/gpt2", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ inputs: prompt })
     });
 
-    const caption = response.choices[0].message.content.trim();
+    const data = await response.json();
+
+    // Extract generated text
+    const caption = data[0]?.generated_text || "No caption generated";
+
     return res.status(200).json({ caption });
   } catch (error) {
     console.error(error);
